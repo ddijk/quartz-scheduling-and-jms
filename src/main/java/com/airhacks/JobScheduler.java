@@ -28,7 +28,7 @@ public class JobScheduler {
     private static final Logger LOGGER = LoggerFactory.getLogger(JobScheduler.class);
 
     @Inject
-    private List<Job> jobs;
+    private Job[] jobs;
 
     private Scheduler scheduler;
 

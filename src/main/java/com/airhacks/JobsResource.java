@@ -16,11 +16,11 @@ public class JobsResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(JobScheduler.class);
 
     @Inject
-    List<Job> jobs;
+    Job[] jobs;
 
     @GET
     @Produces("application/json")
-    public List<Job> get() throws IOException {
+    public Job[] get() throws IOException {
 
         System.out.println("Dit is stdout");
         LOGGER.error("Dit is slf4j level error");

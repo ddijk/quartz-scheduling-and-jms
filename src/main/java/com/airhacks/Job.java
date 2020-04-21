@@ -38,11 +38,10 @@ public class Job {
     }
 
     @Produces
-    public List<Job> jobs() throws IOException {
+    public Job[] jobs() throws IOException {
         ObjectMapper om = new ObjectMapper();
 
-        Job[] jobs = om.readValue(Job.class.getResource("/jobs.json"), Job[].class);
+        return om.readValue(Job.class.getResource("/jobs.json"), Job[].class);
 
-        return Arrays.asList(jobs);
     }
 }
