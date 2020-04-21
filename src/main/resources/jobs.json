@@ -1,10 +1,12 @@
 [
   {
     "name":"job1",
-    "schedule": "0 0 2 15 4 * 2020"
+    "schedule": "10 * * ? 4 * 2020",
+    "jobClass": ""
   },
   {
     "name":"job2",
-    "schedule": "0 0 2 15 4 * 2020"
+    "schedule": "30 * * ? 4 * 2020",
+    "jobClass": ""
   }
 ]
