@@ -18,6 +18,7 @@ import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
+import javax.jms.JMSException;
 import javax.jms.JMSProducer;
 import javax.jms.Message;
 import javax.jms.Topic;
@@ -106,8 +107,13 @@ public class JobScheduler {
         final JMSProducer producer = jmsContext.createProducer();
 
         Message msg = jmsContext.createTextMessage("See how this flies");
-        producer.send(topic, msg);
-        LOGGER.info("Msg sent.");
+        try {
+            msg.setStringProperty("NewsType" , "Sports");
+            producer.send(topic, msg);
+            LOGGER.info("Msg sent.");
+        } catch (JMSException e) {
+            LOGGER.info("Msg NOT sent. "+e);
+        }
 
 
     }
