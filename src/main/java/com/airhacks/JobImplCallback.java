@@ -8,5 +8,8 @@ public class JobImplCallback implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
+       JobScheduler callback = (JobScheduler) jobExecutionContext.getMergedJobDataMap().get("callback");
+
+       callback.send();
     }
 }

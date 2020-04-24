@@ -18,6 +18,8 @@ import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
+import javax.jms.JMSProducer;
+import javax.jms.Message;
 import javax.jms.Topic;
 import java.text.ParseException;
 import java.util.List;
@@ -76,8 +78,9 @@ public class JobScheduler {
         jobDataMap.put(JMS_CONTEXT, jmsContext);
         jobDataMap.put(JMS_TOPIC, topic);
         jobDataMap.put(EVENT_NAME, job.getEventName());
+        jobDataMap.put("callback", this);
 
-        return newJob(JobImpl.class).usingJobData(jobDataMap).withIdentity(job.getName() ).withDescription(job.getName()).build();
+        return newJob(JobImplCallback.class).usingJobData(jobDataMap).withIdentity(job.getName() ).withDescription(job.getName()).build();
     }
 
     private Trigger createCronTrigger(Job job) throws ParseException {
@@ -95,5 +98,17 @@ public class JobScheduler {
             LOGGER.info("Scheduler is shut down FAILED.", e);
             throw new RuntimeException("Scheduler is shut down FAILED");
         }
+    }
+
+    public void send() {
+
+        LOGGER.info("Received callback.");
+        final JMSProducer producer = jmsContext.createProducer();
+
+        Message msg = jmsContext.createTextMessage("See how this flies");
+        producer.send(topic, msg);
+        LOGGER.info("Msg sent.");
+
+
     }
 }

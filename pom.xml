@@ -32,6 +32,12 @@
             <version>1.7.7</version>
             <!--            <scope>test</scope>-->
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.deltaspike.cdictrl/deltaspike-cdictrl-weld -->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.deltaspike.cdictrl</groupId>-->
+<!--            <artifactId>deltaspike-cdictrl-weld</artifactId>-->
+<!--            <version>1.9.3</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
