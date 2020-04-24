@@ -34,10 +34,13 @@ public class JobImpl implements Job {
 
         final JMSProducer producer = jmsContext.createProducer();
 
-        Message event  = jmsContext.createMessage();
+        Message event  = jmsContext.createTextMessage("Event created in Quartz Job!");
         try {
             event.setStringProperty("naam", eventName);
             event.setStringProperty("bron", "workerscheduler");
+
+            // to pass the filter of the test-mdb
+            event.setStringProperty("NewsType" , "Sports");
             producer.send(topic, event);
            LOGGER.error("Event verzonden door '{}' met eventName '{}'", description, eventName);
         } catch (JMSException e) {

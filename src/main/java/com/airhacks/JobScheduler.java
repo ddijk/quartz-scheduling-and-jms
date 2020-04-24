@@ -81,7 +81,7 @@ public class JobScheduler {
         jobDataMap.put(EVENT_NAME, job.getEventName());
         jobDataMap.put("callback", this);
 
-        return newJob(JobImplCallback.class).usingJobData(jobDataMap).withIdentity(job.getName() ).withDescription(job.getName()).build();
+        return newJob(JobImpl.class).usingJobData(jobDataMap).withIdentity(job.getName() ).withDescription(job.getName()).build();
     }
 
     private Trigger createCronTrigger(Job job) throws ParseException {
