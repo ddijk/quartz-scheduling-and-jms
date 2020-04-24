@@ -45,11 +45,9 @@ public class JobScheduler {
     private Scheduler scheduler;
 
     @Inject
-    @ApplicationScoped
     JMSContext jmsContext;
 
     @Resource(lookup = "jms/myTopic2")
-    @ApplicationScoped
     Topic topic;
 
     @PostConstruct
