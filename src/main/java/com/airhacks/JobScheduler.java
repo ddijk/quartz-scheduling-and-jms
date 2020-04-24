@@ -1,6 +1,7 @@
 package com.airhacks;
 
 import org.quartz.CronScheduleBuilder;
+import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -11,12 +12,19 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.jms.JMSContext;
+import javax.jms.Topic;
 import java.text.ParseException;
 import java.util.List;
 
+import static com.airhacks.JobImpl.EVENT_NAME;
+import static com.airhacks.JobImpl.JMS_CONTEXT;
+import static com.airhacks.JobImpl.JMS_TOPIC;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
@@ -30,13 +38,21 @@ public class JobScheduler {
     @Inject
     private Job[] jobs;
 
+    @Inject
     private Scheduler scheduler;
+
+    @Inject
+    @ApplicationScoped
+    JMSContext jmsContext;
+
+    @Resource(lookup = "jms/myTopic2")
+    @ApplicationScoped
+    Topic topic;
 
     @PostConstruct
     public void init() {
 
         try {
-            scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
 
             for (Job job : jobs) {
@@ -55,7 +71,13 @@ public class JobScheduler {
     }
 
     private JobDetail createJobDetail(Job job) {
-        return newJob(JobImpl.class).withIdentity(job.getName() ).withDescription(job.getName()).build();
+
+        JobDataMap jobDataMap = new JobDataMap();
+        jobDataMap.put(JMS_CONTEXT, jmsContext);
+        jobDataMap.put(JMS_TOPIC, topic);
+        jobDataMap.put(EVENT_NAME, job.getEventName());
+
+        return newJob(JobImpl.class).usingJobData(jobDataMap).withIdentity(job.getName() ).withDescription(job.getName()).build();
     }
 
     private Trigger createCronTrigger(Job job) throws ParseException {
@@ -71,6 +93,7 @@ public class JobScheduler {
             scheduler.shutdown(true);
         } catch (SchedulerException e) {
             LOGGER.info("Scheduler is shut down FAILED.", e);
+            throw new RuntimeException("Scheduler is shut down FAILED");
         }
     }
 }

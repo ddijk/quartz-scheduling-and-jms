@@ -4,14 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.enterprise.inject.Produces;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 public class Job {
 
     String name;
     String schedule;
-    String jobClass;
+    String eventName;
 
     public String getName() {
         return name;
@@ -29,12 +27,12 @@ public class Job {
         this.schedule = schedule;
     }
 
-    public String getJobClass() {
-        return jobClass;
+    public String getEventName() {
+        return eventName;
     }
 
-    public void setJobClass(String jobClass) {
-        this.jobClass = jobClass;
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 
     @Produces
